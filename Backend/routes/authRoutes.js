@@ -3,7 +3,6 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 const { check } = require("express-validator");
 
-// Validation middleware
 const validateSignup = [
   check("username").not().isEmpty().withMessage("Username is required"),
   check("email").isEmail().withMessage("Valid email is required"),

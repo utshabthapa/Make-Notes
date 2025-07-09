@@ -3,14 +3,16 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const db = require("./config/db.js");
-const authRoutes = require("./routes/authRoutes.js"); // Changed to require
+const authRoutes = require("./routes/authRoutes.js");
+const noteRoutes = require("./routes/noteRoutes.js");
+const categoryRoutes = require("./routes/categoryRoutes.js");
 
 const app = express();
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
@@ -18,9 +20,9 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-// API Routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/notes", noteRoutes);
+app.use("/api/notes", noteRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -64,7 +66,6 @@ app.use((req, res) => {
   });
 });
 
-// Server Initialization
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`[${new Date().toISOString()}] Server running on port ${PORT}`);

@@ -3,6 +3,7 @@ const db = require("../config/db");
 const { validationResult } = require("express-validator");
 const { signToken } = require("../utils/tokenUtils");
 const { setCookie, clearCookie } = require("../utils/cookieUtils");
+const { verifyToken } = require("../utils/tokenUtils");
 
 const signup = async (req, res, next) => {
   try {
@@ -90,25 +91,35 @@ const logout = (req, res) => {
   res.status(200).json({ status: "success" });
 };
 
-const getCurrentUser = async (req, res, next) => {
+exports.getCurrentUser = async (req, res) => {
   try {
-    const user = req.user;
+    if (!req.user) {
+      return res.status(401).json({
+        status: "fail",
+        message: "Not authenticated",
+      });
+    }
 
     res.status(200).json({
       status: "success",
       data: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
+        id: req.user.id,
+        username: req.user.username,
+        email: req.user.email,
       },
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({
+      status: "error",
+      message: "Server error",
+    });
   }
 };
+
 const protect = async (req, res, next) => {
   try {
-    const token = req.cookies?.jwt;
+    const token =
+      req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({
@@ -117,7 +128,7 @@ const protect = async (req, res, next) => {
       });
     }
 
-    const decoded = verifyToken(token);
+    const decoded = await verifyToken(token);
 
     const [users] = await db.query("SELECT * FROM users WHERE id = ?", [
       decoded.id,
@@ -140,6 +151,6 @@ module.exports = {
   signup,
   login,
   logout,
-  getCurrentUser,
+  getCurrentUser: exports.getCurrentUser,
   protect,
 };
