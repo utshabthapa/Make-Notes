@@ -7,14 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { Save, ArrowLeft } from "lucide-react";
 
 const colorOptions = [
-  { name: "White", value: "#ffffff" },
-  { name: "Light Blue", value: "#e3f2fd" },
-  { name: "Light Green", value: "#e8f5e8" },
-  { name: "Light Yellow", value: "#fff9c4" },
-  { name: "Light Pink", value: "#fce4ec" },
-  { name: "Light Purple", value: "#f3e5f5" },
-  { name: "Light Orange", value: "#fff3e0" },
-  { name: "Light Gray", value: "#f5f5f5" },
+  { name: "White", value: "#f0f0f0" },
+  { name: "Light Blue", value: "#bbdefb" },
+  { name: "Light Green", value: "#c8e6c9" },
+  { name: "Light Yellow", value: "#fff59d" },
+  { name: "Light Pink", value: "#f8bbd0" },
+  { name: "Light Purple", value: "#e1bee7" },
+  { name: "Light Orange", value: "#ffe0b2" },
+  { name: "Light Gray", value: "#e0e0e0" },
 ];
 
 export default function CreateNotes() {
@@ -26,7 +26,7 @@ export default function CreateNotes() {
     title: "",
     content: "",
     categories: [],
-    background_color: "#ffffff",
+    background_color: "#f0f0f0",
   });
 
   useEffect(() => {

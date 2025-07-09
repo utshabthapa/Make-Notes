@@ -4,13 +4,25 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./API";
 import { useNavigate } from "react-router-dom";
-import { RotateCcw, Trash2, Eye } from "lucide-react";
+import {
+  BsArrowClockwise,
+  BsTrash,
+  BsEye,
+  BsSearch,
+  BsSortAlphaUp,
+  BsSortAlphaDown,
+  BsCalendar3,
+  BsSortDown,
+} from "react-icons/bs";
 
 export default function Archives() {
   const navigate = useNavigate();
   const [archivedNotes, setArchivedNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("deleted_at");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
     fetchArchivedNotes();
@@ -43,7 +55,6 @@ export default function Archives() {
           withCredentials: true,
         }
       );
-
       setArchivedNotes(archivedNotes.filter((note) => note.id !== noteId));
     } catch (err) {
       if (err.response?.status === 401) {
@@ -67,7 +78,6 @@ export default function Archives() {
       await axios.delete(`${API_BASE_URL}/notes/${noteId}/permanent`, {
         withCredentials: true,
       });
-
       setArchivedNotes(archivedNotes.filter((note) => note.id !== noteId));
     } catch (err) {
       if (err.response?.status === 401) {
@@ -94,6 +104,55 @@ export default function Archives() {
       navigate("/login");
     } catch (err) {
       console.error("Logout failed");
+    }
+  };
+
+  // Search functionality
+  const filteredNotes = archivedNotes.filter((note) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      note.title.toLowerCase().includes(searchLower) ||
+      note.content.toLowerCase().includes(searchLower)
+    );
+  });
+
+  // Sort functionality
+  const sortedNotes = [...filteredNotes].sort((a, b) => {
+    let aValue, bValue;
+    switch (sortBy) {
+      case "title":
+        aValue = a.title.toLowerCase();
+        bValue = b.title.toLowerCase();
+        break;
+      case "created_at":
+        aValue = new Date(a.created_at);
+        bValue = new Date(b.created_at);
+        break;
+      case "updated_at":
+        aValue = new Date(a.updated_at);
+        bValue = new Date(b.updated_at);
+        break;
+      case "deleted_at":
+        aValue = new Date(a.deleted_at);
+        bValue = new Date(b.deleted_at);
+        break;
+      default:
+        aValue = new Date(a.deleted_at);
+        bValue = new Date(b.deleted_at);
+    }
+    if (sortOrder === "asc") {
+      return aValue > bValue ? 1 : -1;
+    } else {
+      return aValue < bValue ? 1 : -1;
+    }
+  });
+
+  const handleSortChange = (newSortBy) => {
+    if (sortBy === newSortBy) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(newSortBy);
+      setSortOrder("desc");
     }
   };
 
@@ -124,25 +183,117 @@ export default function Archives() {
             </div>
           )}
 
-          {archivedNotes.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-6xl mb-4">🗃️</div>
-              <h3 className="text-xl font-medium text-gray-600 mb-2">
-                No archived notes
-              </h3>
-              <p className="text-gray-500 mb-6">
-                Notes you archive will appear here
-              </p>
+          {/* Search and Sort Controls */}
+          <div className="mb-6 flex flex-col md:flex-row gap-4">
+            {/* Search Bar */}
+            <div className="relative flex-1">
+              <BsSearch
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+              <input
+                type="text"
+                placeholder="Search archived notes by title or content..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            {/* Sort Options */}
+            <div className="flex gap-2">
               <button
-                onClick={() => navigate("/notes")}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                onClick={() => handleSortChange("title")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                  sortBy === "title"
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
               >
-                Go to Notes
+                <BsSortDown size={16} />
+                Title
+                {sortBy === "title" &&
+                  (sortOrder === "asc" ? (
+                    <BsSortAlphaUp size={16} />
+                  ) : (
+                    <BsSortAlphaDown size={16} />
+                  ))}
               </button>
+              <button
+                onClick={() => handleSortChange("created_at")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                  sortBy === "created_at"
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <BsCalendar3 size={16} />
+                Created
+                {sortBy === "created_at" &&
+                  (sortOrder === "asc" ? (
+                    <BsSortAlphaUp size={16} />
+                  ) : (
+                    <BsSortAlphaDown size={16} />
+                  ))}
+              </button>
+              <button
+                onClick={() => handleSortChange("deleted_at")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                  sortBy === "deleted_at"
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <BsTrash size={16} />
+                Archived
+                {sortBy === "deleted_at" &&
+                  (sortOrder === "asc" ? (
+                    <BsSortAlphaUp size={16} />
+                  ) : (
+                    <BsSortAlphaDown size={16} />
+                  ))}
+              </button>
+            </div>
+          </div>
+
+          {sortedNotes.length === 0 ? (
+            <div className="text-center py-12">
+              {searchTerm ? (
+                <>
+                  <div className="text-gray-400 text-6xl mb-4">🔍</div>
+                  <h3 className="text-xl font-medium text-gray-600 mb-2">
+                    No archived notes found
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Try adjusting your search terms
+                  </p>
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    Clear Search
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="text-gray-400 text-6xl mb-4">🗃️</div>
+                  <h3 className="text-xl font-medium text-gray-600 mb-2">
+                    No archived notes
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Notes you archive will appear here
+                  </p>
+                  <button
+                    onClick={() => navigate("/notes")}
+                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    Go to Notes
+                  </button>
+                </>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {archivedNotes.map((note) => (
+              {sortedNotes.map((note) => (
                 <div
                   key={note.id}
                   className="rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 h-64 flex flex-col relative"
@@ -152,7 +303,7 @@ export default function Archives() {
                   }}
                 >
                   {/* Archived indicator */}
-                  <div className="absolute top-2 right-2 bg-gray-500 text-white text-xs px-2 py-1 rounded-full">
+                  <div className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded-full">
                     Archived
                   </div>
 
@@ -175,13 +326,13 @@ export default function Archives() {
                           {note.categories.slice(0, 2).map((category) => (
                             <span
                               key={category.id}
-                              className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full"
+                              className="px-2 py-1 text-xs bg-black text-white rounded-full"
                             >
                               {category.name}
                             </span>
                           ))}
                           {note.categories.length > 2 && (
-                            <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                            <span className="px-2 py-1 text-xs bg-black text-white rounded-full">
                               +{note.categories.length - 2}
                             </span>
                           )}
@@ -197,25 +348,25 @@ export default function Archives() {
                       <div className="flex justify-between space-x-2">
                         <button
                           onClick={() => handleViewNote(note.id)}
-                          className="flex items-center space-x-1 px-2 py-1 text-blue-600 hover:bg-blue-50 rounded text-xs transition-colors"
+                          className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white hover:bg-blue-700 rounded text-xs transition-colors"
                         >
-                          <Eye size={12} />
+                          <BsEye size={12} />
                           <span>View</span>
                         </button>
 
                         <button
                           onClick={() => handleRestore(note.id)}
-                          className="flex items-center space-x-1 px-2 py-1 text-green-600 hover:bg-green-50 rounded text-xs transition-colors"
+                          className="flex items-center space-x-1 px-3 py-1.5 bg-green-600 text-white hover:bg-green-700 rounded text-xs transition-colors"
                         >
-                          <RotateCcw size={12} />
+                          <BsArrowClockwise size={12} />
                           <span>Restore</span>
                         </button>
 
                         <button
                           onClick={() => handlePermanentDelete(note.id)}
-                          className="flex items-center space-x-1 px-2 py-1 text-red-600 hover:bg-red-50 rounded text-xs transition-colors"
+                          className="flex items-center space-x-1 px-3 py-1.5 bg-red-600 text-white hover:bg-red-700 rounded text-xs transition-colors"
                         >
-                          <Trash2 size={12} />
+                          <BsTrash size={12} />
                           <span>Delete</span>
                         </button>
                       </div>
