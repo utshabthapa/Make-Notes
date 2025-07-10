@@ -151,17 +151,16 @@ export default function Bookmarks() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <div className="flex-1 p-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
+    <div className="flex min-h-screen bg-white">
+      <div className="flex-1 p-4 sm:p-6 md:p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 sm:mb-8">
             <div className="flex items-center space-x-3">
-              <BsBookmarkFill size={32} className="text-blue-600" />
               <div>
-                <h1 className="text-3xl font-bold text-gray-800">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mt-14 sm:mt-14 md:mt-0">
                   Bookmarked Notes
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   {bookmarkedNotes.length} bookmarked notes
                 </p>
               </div>
@@ -169,107 +168,115 @@ export default function Bookmarks() {
           </div>
 
           {/* Search and Sort Controls */}
-          <div className="mb-6 flex flex-col md:flex-row gap-4">
+          <div className="mb-4 sm:mb-6 flex flex-col gap-3 sm:gap-4">
             {/* Search Bar */}
-            <div className="relative flex-1">
+            <div className="relative">
               <BsSearch
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
+                size={16}
               />
               <input
                 type="text"
-                placeholder="Search bookmarked notes by title or content..."
+                placeholder="Search bookmarked notes..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+
             {/* Sort Options */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-2">
               <button
                 onClick={() => handleSortChange("title")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border transition-colors whitespace-nowrap text-sm ${
                   sortBy === "title"
                     ? "bg-black text-white border-black"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <BsSortDown size={16} />
-                Title
+                <BsSortDown size={14} />
+                <span className="hidden sm:inline">Title</span>
+                <span className="sm:hidden">A-Z</span>
                 {sortBy === "title" &&
                   (sortOrder === "asc" ? (
-                    <BsSortAlphaUp size={16} />
+                    <BsSortAlphaUp size={14} />
                   ) : (
-                    <BsSortAlphaDown size={16} />
+                    <BsSortAlphaDown size={14} />
                   ))}
               </button>
               <button
                 onClick={() => handleSortChange("created_at")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border transition-colors whitespace-nowrap text-sm ${
                   sortBy === "created_at"
                     ? "bg-black text-white border-black"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <BsCalendar3 size={16} />
-                Created
+                <BsCalendar3 size={14} />
+                <span className="hidden sm:inline">Created</span>
+                <span className="sm:hidden">New</span>
                 {sortBy === "created_at" &&
                   (sortOrder === "asc" ? (
-                    <BsSortAlphaUp size={16} />
+                    <BsSortAlphaUp size={14} />
                   ) : (
-                    <BsSortAlphaDown size={16} />
+                    <BsSortAlphaDown size={14} />
                   ))}
               </button>
               <button
                 onClick={() => handleSortChange("updated_at")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border transition-colors whitespace-nowrap text-sm ${
                   sortBy === "updated_at"
                     ? "bg-black text-white border-black"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <BsClock size={16} />
-                Modified
+                <BsClock size={14} />
+                <span className="hidden sm:inline">Modified</span>
+                <span className="sm:hidden">Modified</span>
                 {sortBy === "updated_at" &&
                   (sortOrder === "asc" ? (
-                    <BsSortAlphaUp size={16} />
+                    <BsSortAlphaUp size={14} />
                   ) : (
-                    <BsSortAlphaDown size={16} />
+                    <BsSortAlphaDown size={14} />
                   ))}
               </button>
             </div>
           </div>
 
           {sortedNotes.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-8 sm:py-12">
               {searchTerm ? (
                 <>
-                  <div className="text-gray-400 text-6xl mb-4">🔍</div>
-                  <h3 className="text-xl font-medium text-gray-600 mb-2">
+                  <div className="text-gray-400 text-4xl sm:text-6xl mb-4">
+                    🔍
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-medium text-gray-600 mb-2">
                     No bookmarked notes found
                   </h3>
-                  <p className="text-gray-500 mb-6">
+                  <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">
                     Try adjusting your search terms
                   </p>
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
                   >
                     Clear Search
                   </button>
                 </>
               ) : (
                 <>
-                  <div className="text-gray-400 text-6xl mb-4">🔖</div>
-                  <h3 className="text-xl font-medium text-gray-600 mb-2">
+                  <div className="text-gray-400 text-4xl sm:text-6xl mb-4">
+                    🔖
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-medium text-gray-600 mb-2">
                     No bookmarked notes
                   </h3>
-                  <p className="text-gray-500 mb-6">
+                  <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">
                     Bookmark notes to find them easily later
                   </p>
                   <button
                     onClick={() => navigate("/notes")}
-                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
                   >
                     Go to Notes
                   </button>
@@ -277,12 +284,12 @@ export default function Bookmarks() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
               {sortedNotes.map((note) => (
                 <div
                   key={note.id}
                   onClick={() => handleNoteClick(note.id)}
-                  className="rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-200 h-64 flex flex-col relative"
+                  className="rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-200 h-48 sm:h-56 md:h-64 flex flex-col relative"
                   style={{
                     backgroundColor: note.background_color || "#ffffff",
                     backgroundImage: "none",
@@ -290,44 +297,44 @@ export default function Bookmarks() {
                 >
                   {/* Pin and Bookmark icons */}
                   <div className="absolute top-2 right-2 flex space-x-1">
-                    <button
+                    {/* <button
                       onClick={(e) => handleTogglePin(e, note.id)}
-                      className={`p-1.5 rounded-full transition-colors ${
+                      className={`p-1 sm:p-1.5 rounded-full transition-colors ${
                         note.pinned
                           ? "bg-black text-white hover:bg-gray-800"
                           : "bg-white text-black hover:bg-gray-200"
                       }`}
                     >
                       {note.pinned ? (
-                        <BsPinFill size={14} />
+                        <BsPinFill size={12} className="sm:w-3.5 sm:h-3.5" />
                       ) : (
-                        <BsPin size={14} />
+                        <BsPin size={12} className="sm:w-3.5 sm:h-3.5" />
                       )}
-                    </button>
+                    </button> */}
                     <button
                       onClick={(e) => handleToggleBookmark(e, note.id)}
-                      className="p-1.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors"
+                      className="p-1 sm:p-1.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors"
                     >
-                      <BsBookmarkFill size={14} />
+                      <BsBookmarkFill size={11} className="sm:w-3 sm:h-3" />
                     </button>
                   </div>
 
-                  <div className="p-4 flex-1 flex flex-col">
-                    <div className="mb-3">
-                      <h3 className="font-semibold text-gray-800 text-lg leading-tight line-clamp-2 pr-12">
+                  <div className="p-3 sm:p-4 flex-1 flex flex-col">
+                    <div className="mb-2 sm:mb-3">
+                      <h3 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg leading-tight line-clamp-2 pr-10 sm:pr-12">
                         {note.title}
                       </h3>
                     </div>
 
-                    <div className="flex-1 mb-3">
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {truncateContent(note.content)}
+                    <div className="flex-1 mb-2 sm:mb-3">
+                      <p className="text-gray-900 tracking-wide text-xs sm:text-sm leading-relaxed line-clamp-3 sm:line-clamp-4">
+                        {truncateContent(note.content, 80)}
                       </p>
                     </div>
 
                     <div className="mt-auto">
                       {note.categories && note.categories.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-2">
+                        <div className="flex flex-wrap gap-1 mb-1 sm:mb-2">
                           {note.categories.slice(0, 2).map((category) => (
                             <span
                               key={category.id}
@@ -344,7 +351,7 @@ export default function Bookmarks() {
                         </div>
                       )}
 
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-black">
                         {new Date(note.updated_at).toLocaleDateString()}
                       </div>
                     </div>

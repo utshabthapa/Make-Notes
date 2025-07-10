@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import {
   BrowserRouter,
@@ -6,7 +8,6 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import Home from "./Pages/Home";
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
 import Notes from "./Pages/Notes";
@@ -35,11 +36,22 @@ const AuthLayout = ({ children, isAuthenticated, setIsAuthenticated }) => {
 
 const AppLayout = ({ children, setIsAuthenticated }) => {
   const location = useLocation();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   return (
     <div className="flex">
       <Sidebar setIsAuthenticated={setIsAuthenticated} />
-      <div className="flex-1 ml-64">{children}</div>
+      <div className={`flex-1 ${isMobile ? "" : "ml-64"}`}>{children}</div>
     </div>
   );
 };
@@ -194,19 +206,6 @@ function App() {
             )
           }
         />
-        {/* <Route
-          path="/categories/new"
-          element={
-            isAuthenticated ? (
-              <AppLayout setIsAuthenticated={setIsAuthenticated}>
-                <CreateCategory />
-              </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        /> */}
-        {/* Add more authenticated routes here with AppLayout */}
       </Routes>
     </BrowserRouter>
   );

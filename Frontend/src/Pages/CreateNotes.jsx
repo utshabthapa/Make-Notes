@@ -4,17 +4,18 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./API";
 import { useNavigate } from "react-router-dom";
-import { Save, ArrowLeft } from "lucide-react";
+import { Save, ArrowLeft, PlusCircle, Palette, Tag } from "lucide-react";
 
 const colorOptions = [
-  { name: "White", value: "#f0f0f0" },
-  { name: "Light Blue", value: "#bbdefb" },
-  { name: "Light Green", value: "#c8e6c9" },
-  { name: "Light Yellow", value: "#fff59d" },
-  { name: "Light Pink", value: "#f8bbd0" },
-  { name: "Light Purple", value: "#e1bee7" },
-  { name: "Light Orange", value: "#ffe0b2" },
-  { name: "Light Gray", value: "#e0e0e0" },
+  { name: "White", value: "#f8fafc" },
+  { name: "Light Blue", value: "#dbeafe" },
+  { name: "Light Green", value: "#dcfce7" },
+  { name: "Light Yellow", value: "#fef3c7" },
+  { name: "Light Orange", value: "#fed7aa" },
+  { name: "Light Pink", value: "#fce7f3" },
+  { name: "Light Purple", value: "#e9d5ff" },
+  { name: "Light Coral", value: "#fecaca" },
+  { name: "Light Gray", value: "#f1f5f9" },
 ];
 
 export default function CreateNotes() {
@@ -26,7 +27,7 @@ export default function CreateNotes() {
     title: "",
     content: "",
     categories: [],
-    background_color: "#f0f0f0",
+    background_color: "#f8fafc",
   });
 
   useEffect(() => {
@@ -96,37 +97,49 @@ export default function CreateNotes() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 sm:p-6 md:p-8">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-6 flex items-center justify-between">
+          {/* Header */}
+          <div className="mb-6 sm:mb-8">
             <button
               onClick={() => navigate("/notes")}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+              className="group flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-all duration-200 px-3 py-2 rounded-lg hover:bg-gray-100  sm:mb-3  mt-14 sm:mt-14 md:mt-0"
             >
-              <ArrowLeft size={20} />
-              <span>Back to Notes</span>
+              <ArrowLeft
+                size={18}
+                className="group-hover:-translate-x-1 transition-transform duration-200"
+              />
+              <span className="font-medium ">Back to Notes</span>
             </button>
-          </div>
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Create New Note
-            </h1>
-            <p className="text-gray-600">Write your thoughts and ideas</p>
+            <div className="flex items-center space-x-3">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                  Create New Note
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600">
+                  Write your thoughts and ideas
+                </p>
+              </div>
+            </div>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-600">{error}</p>
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-red-600 text-sm sm:text-base font-medium">
+                {error}
+              </p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            {/* Note Content Card */}
             <div
-              className="bg-white rounded-lg shadow-sm p-6 border border-gray-200"
+              className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 transition-all duration-300"
               style={{ backgroundColor: formData.background_color }}
             >
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
+                {/* Title Field */}
                 <div>
                   <label
                     htmlFor="title"
@@ -140,12 +153,13 @@ export default function CreateNotes() {
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-medium"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-gray-500 text-base sm:text-lg font-medium bg-white/70 backdrop-blur-sm transition-all duration-200 placeholder:text-gray-400"
                     placeholder="Enter note title..."
                     required
                   />
                 </div>
 
+                {/* Content Field */}
                 <div>
                   <label
                     htmlFor="content"
@@ -156,32 +170,37 @@ export default function CreateNotes() {
                   <textarea
                     id="content"
                     name="content"
-                    rows="12"
+                    rows={window.innerWidth < 640 ? 8 : 12}
                     value={formData.content}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-gray-500 resize-none bg-white/70 backdrop-blur-sm transition-all duration-200 placeholder:text-gray-400 text-sm sm:text-base"
                     placeholder="Start writing your note..."
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-              <div className="space-y-6">
+            {/* Customization Card */}
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200">
+              <div className="space-y-4 sm:space-y-6">
+                {/* Background Color Section */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Background Color
-                  </label>
-                  <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <Palette size={18} className="text-gray-600" />
+                    <label className="text-sm font-medium text-gray-700">
+                      Background Color
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-9 gap-2 sm:gap-3">
                     {colorOptions.map((color) => (
                       <button
                         key={color.value}
                         type="button"
                         onClick={() => handleColorSelect(color.value)}
-                        className={`w-12 h-12 rounded-lg border-2 transition-all ${
+                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 transition-all duration-200 hover:scale-105 ${
                           formData.background_color === color.value
-                            ? "border-blue-500 ring-2 ring-blue-200"
-                            : "border-gray-300 hover:border-gray-400"
+                            ? "border-gray-800 ring-2 ring-gray-300 shadow-md"
+                            : "border-gray-300 hover:border-gray-400 shadow-sm hover:shadow-md"
                         }`}
                         style={{ backgroundColor: color.value }}
                         title={color.name}
@@ -190,37 +209,50 @@ export default function CreateNotes() {
                   </div>
                 </div>
 
+                {/* Categories Section */}
                 {categories.length > 0 && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Categories
-                    </label>
+                    <div className="flex items-center space-x-2 mb-3">
+                      <Tag size={18} className="text-gray-600" />
+                      <label className="text-sm font-medium text-gray-700">
+                        Categories
+                      </label>
+                      <span className="text-xs text-gray-500">
+                        ({formData.categories.length} selected)
+                      </span>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {categories.map((category) => (
                         <button
                           key={category.id}
                           type="button"
                           onClick={() => handleCategoryToggle(category.id)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                          className={`px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-105 ${
                             formData.categories.includes(category.id)
-                              ? "bg-blue-100 text-blue-800 border border-blue-300"
-                              : "bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
+                              ? "bg-gray-800 text-white border border-gray-800 shadow-md"
+                              : "bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 shadow-sm hover:shadow-md"
                           }`}
                         >
                           {category.name}
                         </button>
                       ))}
                     </div>
+                    {formData.categories.length === 0 && (
+                      <p className="text-xs text-gray-500 mt-2">
+                        Select categories to organize your note
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex justify-end space-x-4">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 pt-2">
               <button
                 type="button"
                 onClick={() => navigate("/notes")}
-                className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium text-sm sm:text-base order-2 sm:order-1"
               >
                 Cancel
               </button>
@@ -228,9 +260,12 @@ export default function CreateNotes() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex items-center space-x-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="group w-full sm:w-auto flex items-center justify-center space-x-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl hover:from-gray-900 hover:to-black disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-sm sm:text-base order-1 sm:order-2"
               >
-                <Save size={16} />
+                <Save
+                  size={16}
+                  className="group-hover:scale-110 transition-transform duration-200"
+                />
                 <span>{isLoading ? "Saving..." : "Save Note"}</span>
               </button>
             </div>

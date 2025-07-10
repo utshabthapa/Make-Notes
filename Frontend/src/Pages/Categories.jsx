@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./API";
 import { useNavigate } from "react-router-dom";
-import { Plus, Edit2, Trash2, Save, X } from "lucide-react";
+import { Plus, Edit2, Trash2, Save, X, Tag } from "lucide-react";
 
 export default function Categories() {
   const navigate = useNavigate();
@@ -131,90 +131,112 @@ export default function Categories() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <div className="flex-1 p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Categories
-            </h1>
-            <p className="text-gray-600">Manage your note categories</p>
+      <div className="flex-1 p-4 sm:p-6 md:p-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center space-x-3">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mt-14 sm:mt-14 md:mt-0">
+                  Categories
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600">
+                  Manage your note categories
+                </p>
+              </div>
+            </div>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-600">{error}</p>
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-red-600 text-sm sm:text-base">{error}</p>
             </div>
           )}
 
           {/* Create New Category Section */}
-          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-800">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-200 mb-4 sm:mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
                 Create New Category
               </h2>
               {!showCreateForm && (
                 <button
                   onClick={() => setShowCreateForm(true)}
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  className="group flex items-center justify-center sm:justify-start space-x-2 px-4 py-2.5 bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-xl  transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-sm"
                 >
-                  <Plus size={16} />
+                  <Plus
+                    size={16}
+                    className="group-hover:scale-110 transition-transform duration-200"
+                  />
                   <span>Add Category</span>
                 </button>
               )}
             </div>
 
             {showCreateForm && (
-              <form onSubmit={handleCreateCategory} className="flex space-x-3">
+              <form
+                onSubmit={handleCreateCategory}
+                className="flex flex-col sm:flex-row gap-3"
+              >
                 <input
                   type="text"
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   placeholder="Enter category name..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm sm:text-base"
                   autoFocus
                 />
-                <button
-                  type="submit"
-                  className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-                >
-                  <Save size={16} />
-                  <span>Save</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowCreateForm(false);
-                    setNewCategoryName("");
-                  }}
-                  className="flex items-center space-x-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                >
-                  <X size={16} />
-                  <span>Cancel</span>
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    className="group flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-sm flex-1 sm:flex-none"
+                  >
+                    <Save
+                      size={14}
+                      className="group-hover:scale-110 transition-transform duration-200"
+                    />
+                    <span>Save</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCreateForm(false);
+                      setNewCategoryName("");
+                    }}
+                    className="group flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-sm flex-1 sm:flex-none"
+                  >
+                    <X
+                      size={14}
+                      className="group-hover:scale-110 transition-transform duration-200"
+                    />
+                    <span>Cancel</span>
+                  </button>
+                </div>
               </form>
             )}
           </div>
 
           {/* Categories List */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-800">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="p-4 sm:p-6 border-b border-gray-200">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
                 Your Categories ({categories.length})
               </h2>
             </div>
 
             {categories.length === 0 ? (
-              <div className="p-12 text-center">
-                <div className="text-gray-400 text-4xl mb-4">🏷️</div>
-                <h3 className="text-lg font-medium text-gray-600 mb-2">
+              <div className="p-8 sm:p-12 text-center">
+                <div className="text-gray-400 text-4xl sm:text-6xl mb-4">
+                  🏷️
+                </div>
+                <h3 className="text-lg sm:text-xl font-medium text-gray-600 mb-2">
                   No categories yet
                 </h3>
-                <p className="text-gray-500 mb-4">
+                <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">
                   Create your first category to organize your notes
                 </p>
                 <button
                   onClick={() => setShowCreateForm(true)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-colors text-sm sm:text-base font-medium"
                 >
                   Create Category
                 </button>
@@ -224,59 +246,73 @@ export default function Categories() {
                 {categories.map((category) => (
                   <div
                     key={category.id}
-                    className="p-4 hover:bg-gray-50 transition-colors"
+                    className="p-4 sm:p-6 hover:bg-gray-50 transition-colors"
                   >
                     {editingCategory === category.id ? (
-                      <div className="flex items-center space-x-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <input
                           type="text"
                           value={editCategoryName}
                           onChange={(e) => setEditCategoryName(e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm sm:text-base"
                           autoFocus
                         />
-                        <button
-                          onClick={() => handleEditCategory(category.id)}
-                          className="flex items-center space-x-1 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-                        >
-                          <Save size={14} />
-                          <span>Save</span>
-                        </button>
-                        <button
-                          onClick={cancelEditing}
-                          className="flex items-center space-x-1 px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                        >
-                          <X size={14} />
-                          <span>Cancel</span>
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEditCategory(category.id)}
+                            className="group flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-sm flex-1 sm:flex-none"
+                          >
+                            <Save
+                              size={14}
+                              className="group-hover:scale-110 transition-transform duration-200"
+                            />
+                            <span className="hidden sm:inline">Save</span>
+                          </button>
+                          <button
+                            onClick={cancelEditing}
+                            className="group flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-sm flex-1 sm:flex-none"
+                          >
+                            <X
+                              size={14}
+                              className="group-hover:scale-110 transition-transform duration-200"
+                            />
+                            <span className="hidden sm:inline">Cancel</span>
+                          </button>
+                        </div>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="text-lg font-medium text-gray-800">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div className="flex-1">
+                          <h3 className="text-base sm:text-lg font-medium text-gray-800 mb-1">
                             {category.name}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-xs sm:text-sm text-gray-500">
                             Created:{" "}
                             {new Date(
                               category.created_at || Date.now()
                             ).toLocaleDateString()}
                           </p>
                         </div>
-                        <div className="flex space-x-2">
+                        <div className="flex gap-2">
                           <button
                             onClick={() => startEditing(category)}
-                            className="flex items-center space-x-1 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="group flex items-center justify-center space-x-2 px-4 py-2 bg-white border border-blue-200 text-blue-600 rounded-xl hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm flex-1 sm:flex-none"
                           >
-                            <Edit2 size={14} />
-                            <span>Edit</span>
+                            <Edit2
+                              size={14}
+                              className="group-hover:scale-110 transition-transform duration-200"
+                            />
+                            <span className="hidden sm:inline">Edit</span>
                           </button>
                           <button
                             onClick={() => handleDeleteCategory(category.id)}
-                            className="flex items-center space-x-1 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="group flex items-center justify-center space-x-2 px-4 py-2 bg-white border border-red-200 text-red-600 rounded-xl hover:bg-red-50 hover:border-red-300 transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm flex-1 sm:flex-none"
                           >
-                            <Trash2 size={14} />
-                            <span>Delete</span>
+                            <Trash2
+                              size={14}
+                              className="group-hover:scale-110 transition-transform duration-200"
+                            />
+                            <span className="hidden sm:inline">Delete</span>
                           </button>
                         </div>
                       </div>

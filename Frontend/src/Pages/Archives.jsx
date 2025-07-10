@@ -7,12 +7,12 @@ import { useNavigate } from "react-router-dom";
 import {
   BsArrowClockwise,
   BsTrash,
-  BsEye,
   BsSearch,
   BsSortAlphaUp,
   BsSortAlphaDown,
   BsCalendar3,
   BsSortDown,
+  BsArchive,
 } from "react-icons/bs";
 
 export default function Archives() {
@@ -98,15 +98,6 @@ export default function Archives() {
     return content.substring(0, maxLength) + "...";
   };
 
-  const handleLogout = async () => {
-    try {
-      await axios.get(`${API_BASE_URL}/auth/logout`, { withCredentials: true });
-      navigate("/login");
-    } catch (err) {
-      console.error("Logout failed");
-    }
-  };
-
   // Search functionality
   const filteredNotes = archivedNotes.filter((note) => {
     const searchLower = searchTerm.toLowerCase();
@@ -166,125 +157,137 @@ export default function Archives() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <div className="flex-1 p-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Archived Notes
-            </h1>
-            <p className="text-gray-600">
-              {archivedNotes.length} archived notes
-            </p>
+      <div className="flex-1 p-4 sm:p-6 md:p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center space-x-3">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mt-14 sm:mt-14 md:mt-0">
+                  Archived Notes
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600">
+                  {archivedNotes.length} archived notes
+                </p>
+              </div>
+            </div>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-600">{error}</p>
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-red-600 text-sm sm:text-base">{error}</p>
             </div>
           )}
 
           {/* Search and Sort Controls */}
-          <div className="mb-6 flex flex-col md:flex-row gap-4">
+          <div className="mb-4 sm:mb-6 flex flex-col gap-3 sm:gap-4">
             {/* Search Bar */}
-            <div className="relative flex-1">
+            <div className="relative">
               <BsSearch
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
+                size={16}
               />
               <input
                 type="text"
-                placeholder="Search archived notes by title or content..."
+                placeholder="Search archived notes..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+
             {/* Sort Options */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-2">
               <button
                 onClick={() => handleSortChange("title")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border transition-colors whitespace-nowrap text-sm ${
                   sortBy === "title"
                     ? "bg-black text-white border-black"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <BsSortDown size={16} />
-                Title
+                <BsSortDown size={14} />
+                <span className="hidden sm:inline">Title</span>
+                <span className="sm:hidden">A-Z</span>
                 {sortBy === "title" &&
                   (sortOrder === "asc" ? (
-                    <BsSortAlphaUp size={16} />
+                    <BsSortAlphaUp size={14} />
                   ) : (
-                    <BsSortAlphaDown size={16} />
+                    <BsSortAlphaDown size={14} />
                   ))}
               </button>
               <button
                 onClick={() => handleSortChange("created_at")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border transition-colors whitespace-nowrap text-sm ${
                   sortBy === "created_at"
                     ? "bg-black text-white border-black"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <BsCalendar3 size={16} />
-                Created
+                <BsCalendar3 size={14} />
+                <span className="hidden sm:inline">Created</span>
+                <span className="sm:hidden">New</span>
                 {sortBy === "created_at" &&
                   (sortOrder === "asc" ? (
-                    <BsSortAlphaUp size={16} />
+                    <BsSortAlphaUp size={14} />
                   ) : (
-                    <BsSortAlphaDown size={16} />
+                    <BsSortAlphaDown size={14} />
                   ))}
               </button>
               <button
                 onClick={() => handleSortChange("deleted_at")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border transition-colors whitespace-nowrap text-sm ${
                   sortBy === "deleted_at"
                     ? "bg-black text-white border-black"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <BsTrash size={16} />
-                Archived
+                <BsTrash size={14} />
+                <span className="hidden sm:inline">Archived</span>
+                <span className="sm:hidden">Archived</span>
                 {sortBy === "deleted_at" &&
                   (sortOrder === "asc" ? (
-                    <BsSortAlphaUp size={16} />
+                    <BsSortAlphaUp size={14} />
                   ) : (
-                    <BsSortAlphaDown size={16} />
+                    <BsSortAlphaDown size={14} />
                   ))}
               </button>
             </div>
           </div>
 
           {sortedNotes.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-8 sm:py-12">
               {searchTerm ? (
                 <>
-                  <div className="text-gray-400 text-6xl mb-4">🔍</div>
-                  <h3 className="text-xl font-medium text-gray-600 mb-2">
+                  <div className="text-gray-400 text-4xl sm:text-6xl mb-4">
+                    🔍
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-medium text-gray-600 mb-2">
                     No archived notes found
                   </h3>
-                  <p className="text-gray-500 mb-6">
+                  <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">
                     Try adjusting your search terms
                   </p>
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
                   >
                     Clear Search
                   </button>
                 </>
               ) : (
                 <>
-                  <div className="text-gray-400 text-6xl mb-4">🗃️</div>
-                  <h3 className="text-xl font-medium text-gray-600 mb-2">
+                  <div className="text-gray-400 text-4xl sm:text-6xl mb-4">
+                    🗃️
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-medium text-gray-600 mb-2">
                     No archived notes
                   </h3>
-                  <p className="text-gray-500 mb-6">
+                  <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">
                     Notes you archive will appear here
                   </p>
                   <button
                     onClick={() => navigate("/notes")}
-                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
                   >
                     Go to Notes
                   </button>
@@ -292,37 +295,33 @@ export default function Archives() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
               {sortedNotes.map((note) => (
                 <div
                   key={note.id}
-                  className="rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 h-64 flex flex-col relative"
+                  onClick={() => handleViewNote(note.id)}
+                  className="rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 h-48 sm:h-56 md:h-64 flex flex-col relative cursor-pointer group"
                   style={{
                     backgroundColor: note.background_color || "#ffffff",
                     backgroundImage: "none",
                   }}
                 >
-                  {/* Archived indicator */}
-                  <div className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded-full">
-                    Archived
-                  </div>
-
-                  <div className="p-4 flex-1 flex flex-col">
-                    <div className="mb-3">
-                      <h3 className="font-semibold text-gray-800 text-lg leading-tight line-clamp-2">
+                  <div className="p-3 sm:p-4 flex-1 flex flex-col">
+                    <div className="mb-2 sm:mb-3">
+                      <h3 className="font-semibold text-gray-900 text-sm sm:text-base md:text-lg leading-tight line-clamp-2 pr-10 sm:pr-12">
                         {note.title}
                       </h3>
                     </div>
 
-                    <div className="flex-1 mb-3">
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {truncateContent(note.content)}
+                    <div className="flex-1 mb-2 sm:mb-3">
+                      <p className="text-gray-900 tracking-wide text-xs sm:text-sm leading-relaxed line-clamp-3 sm:line-clamp-4">
+                        {truncateContent(note.content, 80)}
                       </p>
                     </div>
 
                     <div className="mt-auto">
                       {note.categories && note.categories.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-2">
+                        <div className="flex flex-wrap gap-1 mb-1 sm:mb-2">
                           {note.categories.slice(0, 2).map((category) => (
                             <span
                               key={category.id}
@@ -339,35 +338,35 @@ export default function Archives() {
                         </div>
                       )}
 
-                      <div className="text-xs text-gray-400 mb-3">
+                      <div className="text-xs text-gray-500 mb-2">
                         Archived:{" "}
                         {new Date(note.deleted_at).toLocaleDateString()}
                       </div>
 
-                      {/* Action buttons */}
-                      <div className="flex justify-between space-x-2">
+                      {/* Floating Action Buttons */}
+                      <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <button
-                          onClick={() => handleViewNote(note.id)}
-                          className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white hover:bg-blue-700 rounded text-xs transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRestore(note.id);
+                          }}
+                          className="w-7 h-7 sm:w-8 sm:h-8 bg-white/90 backdrop-blur-sm hover:bg-emerald-500 hover:text-white text-emerald-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center border border-emerald-200 hover:border-emerald-500"
+                          title="Restore note"
                         >
-                          <BsEye size={12} />
-                          <span>View</span>
+                          <BsArrowClockwise
+                            size={12}
+                            className="sm:w-3.5 sm:h-3.5"
+                          />
                         </button>
-
                         <button
-                          onClick={() => handleRestore(note.id)}
-                          className="flex items-center space-x-1 px-3 py-1.5 bg-green-600 text-white hover:bg-green-700 rounded text-xs transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePermanentDelete(note.id);
+                          }}
+                          className="w-7 h-7 sm:w-8 sm:h-8 bg-white/90 backdrop-blur-sm hover:bg-red-500 hover:text-white text-red-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center border border-red-200 hover:border-red-500"
+                          title="Delete permanently"
                         >
-                          <BsArrowClockwise size={12} />
-                          <span>Restore</span>
-                        </button>
-
-                        <button
-                          onClick={() => handlePermanentDelete(note.id)}
-                          className="flex items-center space-x-1 px-3 py-1.5 bg-red-600 text-white hover:bg-red-700 rounded text-xs transition-colors"
-                        >
-                          <BsTrash size={12} />
-                          <span>Delete</span>
+                          <BsTrash size={12} className="sm:w-3.5 sm:h-3.5" />
                         </button>
                       </div>
                     </div>
