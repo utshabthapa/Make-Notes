@@ -2,12 +2,49 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const db = require("./config/db.js");
 const authRoutes = require("./routes/authRoutes.js");
 const noteRoutes = require("./routes/noteRoutes.js");
 const categoryRoutes = require("./routes/categoryRoutes.js");
 
 const app = express();
+
+// Swagger configuration
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Make Notes API",
+      version: "1.0.0",
+      description: "API documentation for the Make Notes application",
+      contact: {
+        name: "API Support",
+        email: "support@makenotes.com",
+      },
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT || 5000}`,
+        description: "Development server",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
@@ -19,6 +56,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// Swagger UI route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);

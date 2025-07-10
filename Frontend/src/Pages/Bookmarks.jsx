@@ -52,24 +52,6 @@ export default function Bookmarks() {
     navigate(`/note/${noteId}`);
   };
 
-  const handleTogglePin = async (e, noteId) => {
-    e.stopPropagation();
-    try {
-      await axios.patch(
-        `${API_BASE_URL}/notes/${noteId}/pin`,
-        {},
-        { withCredentials: true }
-      );
-      setBookmarkedNotes(
-        bookmarkedNotes.map((note) =>
-          note.id === noteId ? { ...note, pinned: !note.pinned } : note
-        )
-      );
-    } catch (err) {
-      console.error("Failed to toggle pin");
-    }
-  };
-
   const handleToggleBookmark = async (e, noteId) => {
     e.stopPropagation();
     try {
@@ -89,7 +71,6 @@ export default function Bookmarks() {
     return content.substring(0, maxLength) + "...";
   };
 
-  // Search functionality
   const filteredNotes = bookmarkedNotes.filter((note) => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -98,7 +79,6 @@ export default function Bookmarks() {
     );
   });
 
-  // Sort functionality
   const sortedNotes = [...filteredNotes].sort((a, b) => {
     let aValue, bValue;
     switch (sortBy) {
@@ -167,9 +147,7 @@ export default function Bookmarks() {
             </div>
           </div>
 
-          {/* Search and Sort Controls */}
           <div className="mb-4 sm:mb-6 flex flex-col gap-3 sm:gap-4">
-            {/* Search Bar */}
             <div className="relative">
               <BsSearch
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -184,7 +162,6 @@ export default function Bookmarks() {
               />
             </div>
 
-            {/* Sort Options */}
             <div className="flex gap-2 overflow-x-auto pb-2">
               <button
                 onClick={() => handleSortChange("title")}
@@ -295,22 +272,7 @@ export default function Bookmarks() {
                     backgroundImage: "none",
                   }}
                 >
-                  {/* Pin and Bookmark icons */}
                   <div className="absolute top-2 right-2 flex space-x-1">
-                    {/* <button
-                      onClick={(e) => handleTogglePin(e, note.id)}
-                      className={`p-1 sm:p-1.5 rounded-full transition-colors ${
-                        note.pinned
-                          ? "bg-black text-white hover:bg-gray-800"
-                          : "bg-white text-black hover:bg-gray-200"
-                      }`}
-                    >
-                      {note.pinned ? (
-                        <BsPinFill size={12} className="sm:w-3.5 sm:h-3.5" />
-                      ) : (
-                        <BsPin size={12} className="sm:w-3.5 sm:h-3.5" />
-                      )}
-                    </button> */}
                     <button
                       onClick={(e) => handleToggleBookmark(e, note.id)}
                       className="p-1 sm:p-1.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors"
