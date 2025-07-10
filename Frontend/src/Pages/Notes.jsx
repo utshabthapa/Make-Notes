@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./API";
@@ -19,6 +17,8 @@ import {
   BsX,
   BsFunnel,
 } from "react-icons/bs";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Notes() {
   const navigate = useNavigate();
@@ -89,8 +89,19 @@ export default function Notes() {
           note.id === noteId ? { ...note, bookmarked: !note.bookmarked } : note
         )
       );
+
+      // Show toast notification
+      const note = notes.find((n) => n.id === noteId);
+      if (note) {
+        if (!note.bookmarked) {
+          toast.success(`"${note.title}" added to bookmarks`);
+        } else {
+          toast.info(`"${note.title}" removed from bookmarks`);
+        }
+      }
     } catch (err) {
       console.error("Failed to toggle bookmark");
+      toast.error("Failed to update bookmark");
     }
   };
 
@@ -577,6 +588,17 @@ export default function Notes() {
           />
         </svg>
       </button>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }

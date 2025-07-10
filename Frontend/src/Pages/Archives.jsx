@@ -338,7 +338,7 @@ export default function Archives() {
                         </div>
                       )}
 
-                      <div className="text-xs text-gray-500 mb-2">
+                      <div className="text-xs text-gray-900 mb-2">
                         Archived:{" "}
                         {new Date(note.deleted_at).toLocaleDateString()}
                       </div>

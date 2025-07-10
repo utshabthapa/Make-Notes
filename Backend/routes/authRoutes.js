@@ -163,7 +163,7 @@ router.get("/logout", authController.logout);
  *                   type: string
  *                   example: You are not logged in! Please log in to get access.
  */
-
+router.get("/me", authController.protect, authController.getCurrentUser);
 /**
  * @swagger
  * components:
