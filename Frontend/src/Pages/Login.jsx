@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -22,7 +20,6 @@ export default function Login({ setIsAuthenticated }) {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -160,28 +157,6 @@ export default function Login({ setIsAuthenticated }) {
               )}
             </div>
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-3.5 w-3.5 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember-me" className="ml-2 text-gray-700">
-                  Remember me
-                </label>
-              </div>
-              <button
-                type="button"
-                className="font-medium text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                Forgot password?
-              </button>
-            </div>
-
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -197,7 +172,6 @@ export default function Login({ setIsAuthenticated }) {
             </button>
           </form>
 
-          {/* Sign Up Link */}
           <div className="mt-5 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
@@ -211,7 +185,6 @@ export default function Login({ setIsAuthenticated }) {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500">
             By signing in, you agree to our{" "}

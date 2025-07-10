@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -25,7 +23,6 @@ export default function Signup({ setIsAuthenticated }) {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -253,7 +250,6 @@ export default function Signup({ setIsAuthenticated }) {
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -271,7 +267,6 @@ export default function Signup({ setIsAuthenticated }) {
             </button>
           </form>
 
-          {/* Login Link */}
           <div className="mt-5 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
@@ -285,7 +280,6 @@ export default function Signup({ setIsAuthenticated }) {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500">
             By creating an account, you agree to our{" "}

@@ -21,6 +21,7 @@ import EditNote from "./Pages/EditNote";
 import Categories from "./Pages/Categories";
 import Archives from "./Pages/Archives";
 import Bookmarks from "./Pages/Bookmarks";
+import NotFound from "./Pages/NotFound";
 
 const AuthLayout = ({ children, isAuthenticated, setIsAuthenticated }) => {
   return (
@@ -206,6 +207,7 @@ function App() {
             )
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

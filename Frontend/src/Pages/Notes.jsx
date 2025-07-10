@@ -90,7 +90,6 @@ export default function Notes() {
         )
       );
 
-      // Show toast notification
       const note = notes.find((n) => n.id === noteId);
       if (note) {
         if (!note.bookmarked) {
@@ -123,7 +122,6 @@ export default function Notes() {
     return content.substring(0, maxLength) + "...";
   };
 
-  // Enhanced filtering with categories
   const filteredNotes = notes.filter((note) => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch =
@@ -138,7 +136,6 @@ export default function Notes() {
     return matchesSearch && matchesCategory;
   });
 
-  // Sort functionality
   const sortedNotes = [...filteredNotes].sort((a, b) => {
     let aValue, bValue;
     switch (sortBy) {
@@ -316,9 +313,7 @@ export default function Notes() {
             </div>
           </div>
 
-          {/* Search and Filter Controls */}
           <div className="mb-4 sm:mb-6 flex flex-col gap-3 sm:gap-4">
-            {/* Search Bar */}
             <div className="relative">
               <BsSearch
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -379,7 +374,6 @@ export default function Notes() {
                 </div>
               )}
 
-            {/* Sort Options */}
             <div className="flex gap-2 overflow-x-auto pb-2">
               <button
                 onClick={() => handleSortChange("title")}
@@ -438,7 +432,6 @@ export default function Notes() {
             </div>
           </div>
 
-          {/* Active Filters Display */}
           {activeFiltersCount > 0 && (
             <div className="mb-4 sm:mb-6 flex flex-wrap items-center gap-2">
               <span className="text-sm text-gray-600 font-medium">
@@ -519,7 +512,6 @@ export default function Notes() {
             </div>
           ) : (
             <div className="space-y-6 sm:space-y-8">
-              {/* Pinned Notes Section */}
               {pinnedNotes.length > 0 && (
                 <div>
                   <div className="flex items-center space-x-2 mb-3 sm:mb-4">
@@ -542,7 +534,6 @@ export default function Notes() {
                 </div>
               )}
 
-              {/* Regular Notes Section */}
               {regularNotes.length > 0 && (
                 <div>
                   <div className="flex items-center space-x-2 mb-3 sm:mb-4">
@@ -565,7 +556,6 @@ export default function Notes() {
         </div>
       </div>
 
-      {/* Floating Action Button - Mobile Only */}
       <button
         onClick={() => navigate("/create-note")}
         className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-black text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center z-50 hover:scale-105 active:scale-95"

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./API";
@@ -137,7 +135,6 @@ export default function SingleNote() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
-        {/* Header */}
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate(isArchived ? "/archives" : "/notes")}
@@ -152,7 +149,6 @@ export default function SingleNote() {
             </span>
           </button>
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             {isArchived ? (
               <>
@@ -230,12 +226,10 @@ export default function SingleNote() {
           <div></div>
         )}
 
-        {/* Note Content */}
         <div
           className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
           style={{ backgroundColor: note.background_color || "#ffffff" }}
         >
-          {/* Note Header */}
           <div className="p-4 sm:p-6 md:p-8 border-b border-gray-200/50">
             <div className="flex items-start space-x-3 mb-4 sm:mb-6">
               <div className="min-w-0 flex-1">

@@ -244,6 +244,7 @@ router.delete("/:id", notesController.deleteNote);
  *       404:
  *         description: Note not found
  */
+router.patch("/:id/unarchive", notesController.unarchiveNote);
 router.patch("/:id/pin", notesController.togglePin);
 
 /**

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./API";
@@ -98,7 +96,6 @@ export default function Archives() {
     return content.substring(0, maxLength) + "...";
   };
 
-  // Search functionality
   const filteredNotes = archivedNotes.filter((note) => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -107,7 +104,6 @@ export default function Archives() {
     );
   });
 
-  // Sort functionality
   const sortedNotes = [...filteredNotes].sort((a, b) => {
     let aValue, bValue;
     switch (sortBy) {
